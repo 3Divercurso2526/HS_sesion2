@@ -1,0 +1,270 @@
+<!-- Chosen Palette: Fresh & Focused Greens -->
+<!-- Application Structure Plan: This SPA continues the teacher-facing dashboard format from Session 1. It guides the teacher through a new set of tasks using a vertical, collapsible accordion structure. This maintains consistency and provides a task-oriented flow. The session is broken into four phases: analyzing the project brief, a tutorial on Padlet, a hands-on workshop for teams to create their own Padlet, and a final sharing phase. This structure logically sequences the learning, moving from understanding the 'what' (the project requirements) to setting up the 'how' (the documentation tool). -->
+<!-- Visualization & Content Choices: Report Info -> Session 2 Plan. Goal -> Organize & Manage. Viz/Presentation Method -> Interactive Accordion/Checklist. Interaction -> Click to expand/collapse, check off steps. Justification -> Proven effective in the previous session for classroom management. Report Info -> Timings. Goal -> Manage Time. Viz/Presentation Method -> Integrated JS Timers. Interaction -> Start/Pause/Reset. Justification -> Essential for keeping the class on schedule. Report Info -> Key tasks for students. Goal -> Guide student work. Viz/Presentation Method -> Highlighted info boxes within phases. Interaction -> Static display. Justification -> Clearly communicates instructions to the teacher to relay to students. All elements built with HTML/Tailwind and JS. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Sesión 2: Análisis y Herramientas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .phase-header[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+        .task-item input:checked + label { text-decoration: line-through; color: #6b7280; }
+        .timer-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- MODAL DE MATERIALES -->
+    <div id="materials-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-lg w-full m-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-green-800">Materiales Necesarios</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <ul class="list-disc list-inside space-y-2 text-lg">
+                <li>Proyector o Pizarra Digital.</li>
+                <li>Ordenadores o tablets para cada equipo.</li>
+                <li>Acceso a Internet.</li>
+                <li>Enlace al "Pliego de Licitación" del proyecto.</li>
+                <li>Enlace a la web de Padlet.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+        <!-- CABECERA -->
+        <header class="bg-white p-6 rounded-xl shadow-md mb-8 border-l-8 border-green-700">
+            <h1 class="text-3xl sm:text-4xl font-black text-gray-900">Proyecto "Sembrando Futuro"</h1>
+            <h2 class="text-xl sm:text-2xl font-bold text-green-700 mt-1">Guion Interactivo: Sesión 2</h2>
+            <div class="flex justify-between items-center mt-4">
+                <p class="text-gray-600"><strong>Fecha:</strong> Martes, 7 de Octubre de 2025</p>
+                <button id="open-modal-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    Ver Materiales 📋
+                </button>
+            </div>
+        </header>
+
+        <!-- FASES DE LA SESIÓN -->
+        <div class="space-y-6">
+
+            <!-- FASE 1 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <button class="w-full p-5 flex justify-between items-center text-left phase-header" aria-expanded="true" data-target="phase1-content">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">FASE 1: Descifrando el Contrato</h3>
+                        <p class="text-gray-500">Análisis del Pliego de Licitación en equipos.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <span class="font-bold text-lg text-green-700">20 min</span>
+                            <div id="timer1" class="text-gray-600 font-mono">20:00</div>
+                        </div>
+                        <span class="text-2xl transition-transform chevron">▲</span>
+                    </div>
+                </button>
+                <div id="phase1-content" class="p-6 border-t">
+                    <div class="flex justify-center space-x-2 mb-6">
+                        <button class="timer-btn px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700" data-time="1200" data-timer-id="timer1">Iniciar</button>
+                        <button class="timer-btn px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" data-action="pause" data-timer-id="timer1">Pausar</button>
+                        <button class="timer-btn px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700" data-action="reset" data-timer-id="timer1">Reset</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="task-item"><input type="checkbox" id="task1-1"><label for="task1-1" class="ml-3 text-lg">Recordar brevemente la sesión anterior y los equipos formados.</label></div>
+                        <div class="task-item"><input type="checkbox" id="task1-2"><label for="task1-2" class="ml-3 text-lg">Indicar a los equipos que abran el Pliego de Licitación.</label></div>
+                        <div class="bg-yellow-100 p-4 rounded-lg">
+                            <p class="font-bold">🎯 Tarea para los equipos:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>Leer en equipo las secciones "Objeto", "Alcance" y "Criterios".</li>
+                                <li>Anotar en un borrador los **3 entregables principales** que se piden.</li>
+                                <li>Identificar los **4 criterios** con los que se les va a evaluar.</li>
+                            </ul>
+                        </div>
+                         <div class="task-item"><input type="checkbox" id="task1-3"><label for="task1-3" class="ml-3 text-lg">Puesta en común rápida para asegurar que todos han entendido la misión.</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FASE 2 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <button class="w-full p-5 flex justify-between items-center text-left phase-header" aria-expanded="false" data-target="phase2-content">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">FASE 2: El Cuaderno de Campo Digital</h3>
+                        <p class="text-gray-500">Tutorial de la herramienta Padlet.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <span class="font-bold text-lg text-green-700">15 min</span>
+                            <div id="timer2" class="text-gray-600 font-mono">15:00</div>
+                        </div>
+                        <span class="text-2xl transition-transform chevron">▼</span>
+                    </div>
+                </button>
+                <div id="phase2-content" class="p-6 border-t hidden">
+                    <div class="flex justify-center space-x-2 mb-6">
+                        <button class="timer-btn px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700" data-time="900" data-timer-id="timer2">Iniciar</button>
+                        <button class="timer-btn px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" data-action="pause" data-timer-id="timer2">Pausar</button>
+                        <button class="timer-btn px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700" data-action="reset" data-timer-id="timer2">Reset</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="task-item"><input type="checkbox" id="task2-1"><label for="task2-1" class="ml-3 text-lg">Presentar Padlet como el "Cuaderno de Campo Digital" o "Diario de Proyecto".</label></div>
+                        <div class="task-item"><input type="checkbox" id="task2-2"><label for="task2-2" class="ml-3 text-lg">Mostrar un ejemplo de Padlet ya creado con la estructura deseada.</label></div>
+                         <div class="bg-blue-100 p-4 rounded-lg">
+                            <p class="font-bold text-blue-800">💡 Estructura Recomendada (Columnas):</p>
+                            <ul class="list-disc list-inside ml-4 text-blue-900">
+                                <li>**Fase 1: Diseño:** Aquí irán los planos, maquetas, etc.</li>
+                                <li>**Investigación:** Enlaces, resúmenes, datos de plantas...</li>
+                                <li>**Actas de Reunión:** Decisiones tomadas en cada sesión.</li>
+                                <li>**Tareas Pendientes:** Un checklist de lo que hay que hacer.</li>
+                            </ul>
+                        </div>
+                        <div class="task-item"><input type="checkbox" id="task2-3"><label for="task2-3" class="ml-3 text-lg">Explicar cómo crear un Padlet, añadir columnas y publicar contenido (texto, imágenes, enlaces).</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FASE 3 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <button class="w-full p-5 flex justify-between items-center text-left phase-header" aria-expanded="false" data-target="phase3-content">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">FASE 3: Construyendo Nuestro Diario</h3>
+                        <p class="text-gray-500">Los equipos crean y configuran su Padlet.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <span class="font-bold text-lg text-green-700">45 min</span>
+                            <div id="timer3" class="text-gray-600 font-mono">45:00</div>
+                        </div>
+                        <span class="text-2xl transition-transform chevron">▼</span>
+                    </div>
+                </button>
+                <div id="phase3-content" class="p-6 border-t hidden">
+                    <div class="flex justify-center space-x-2 mb-6">
+                        <button class="timer-btn px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700" data-time="2700" data-timer-id="timer3">Iniciar</button>
+                        <button class="timer-btn px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" data-action="pause" data-timer-id="timer3">Pausar</button>
+                        <button class="timer-btn px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700" data-action="reset" data-timer-id="timer3">Reset</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="task-item"><input type="checkbox" id="task3-1"><label for="task3-1" class="ml-3 text-lg">Dar tiempo a los equipos para que un miembro cree el Padlet y comparta el enlace con los demás.</label></div>
+                        <div class="task-item"><input type="checkbox" id="task3-2"><label for="task3-2" class="ml-3 text-lg">Asignar la primera tarea obligatoria en el Padlet.</label></div>
+                        <div class="bg-yellow-100 p-4 rounded-lg">
+                            <p class="font-bold">🎯 Tarea para los equipos:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>Configurar el Padlet con el nombre de su empresa y una descripción.</li>
+                                <li>Crear las 4 columnas recomendadas.</li>
+                                <li>**Primera Publicación:** En la columna "Actas de Reunión", crear una entrada resumiendo el análisis del Pliego que hicieron en la Fase 1.</li>
+                            </ul>
+                        </div>
+                        <div class="task-item"><input type="checkbox" id="task3-3"><label for="task3-3" class="ml-3 text-lg">Circular por el aula para resolver dudas técnicas con Padlet.</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FASE 4 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <button class="w-full p-5 flex justify-between items-center text-left phase-header" aria-expanded="false" data-target="phase4-content">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">FASE 4: Puesta en Común y Cierre</h3>
+                        <p class="text-gray-500">Compartir Padlets y próximos pasos.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <span class="font-bold text-lg text-green-700">10 min</span>
+                            <div id="timer4" class="text-gray-600 font-mono">10:00</div>
+                        </div>
+                        <span class="text-2xl transition-transform chevron">▼</span>
+                    </div>
+                </button>
+                <div id="phase4-content" class="p-6 border-t hidden">
+                    <div class="flex justify-center space-x-2 mb-6">
+                        <button class="timer-btn px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700" data-time="600" data-timer-id="timer4">Iniciar</button>
+                        <button class="timer-btn px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" data-action="pause" data-timer-id="timer4">Pausar</button>
+                        <button class="timer-btn px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700" data-action="reset" data-timer-id="timer4">Reset</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="task-item"><input type="checkbox" id="task4-1"><label for="task4-1" class="ml-3 text-lg">Recopilar en un documento compartido los enlaces a los Padlets de cada equipo.</label></div>
+                        <div class="task-item"><input type="checkbox" id="task4-2"><label for="task4-2" class="ml-3 text-lg">Proyectar 1 o 2 Padlets a modo de ejemplo si da tiempo.</label></div>
+                        <div class="task-item"><input type="checkbox" id="task4-3"><label for="task4-3" class="ml-3 text-lg">Anunciar la próxima sesión: "Operación Terreno". La primera tarea será documentarla en el Padlet.</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica para acordeones
+            const phaseHeaders = document.querySelectorAll('.phase-header');
+            phaseHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const target = document.getElementById(header.dataset.target);
+                    const isExpanded = header.getAttribute('aria-expanded') === 'true';
+                    header.setAttribute('aria-expanded', !isExpanded);
+                    target.classList.toggle('hidden');
+                });
+            });
+
+            // Lógica para el modal
+            const modal = document.getElementById('materials-modal');
+            const openBtn = document.getElementById('open-modal-btn');
+            const closeBtn = document.getElementById('close-modal-btn');
+            openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+            closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+
+            // Lógica para los temporizadores
+            const timers = {};
+            document.querySelectorAll('.timer-btn').forEach(button => {
+                const timerId = button.dataset.timerId;
+                if (!timers[timerId]) {
+                    timers[timerId] = { interval: null, remaining: 0, initialTime: 0 };
+                }
+
+                button.addEventListener('click', () => {
+                    const action = button.dataset.action;
+                    const timerDisplay = document.getElementById(timerId);
+
+                    if (button.dataset.time) { // Botón de Iniciar
+                        clearInterval(timers[timerId].interval);
+                        const totalSeconds = parseInt(button.dataset.time, 10);
+                        timers[timerId].initialTime = totalSeconds;
+                        timers[timerId].remaining = totalSeconds;
+                        
+                        timers[timerId].interval = setInterval(() => {
+                            timers[timerId].remaining--;
+                            const minutes = Math.floor(timers[timerId].remaining / 60).toString().padStart(2, '0');
+                            const seconds = (timers[timerId].remaining % 60).toString().padStart(2, '0');
+                            timerDisplay.textContent = `${minutes}:${seconds}`;
+
+                            if (timers[timerId].remaining <= 0) {
+                                clearInterval(timers[timerId].interval);
+                                timerDisplay.textContent = "¡Tiempo!";
+                                timerDisplay.classList.add('text-red-500', 'font-bold');
+                            }
+                        }, 1000);
+                    } else if (action === 'pause') {
+                        clearInterval(timers[timerId].interval);
+                    } else if (action === 'reset') {
+                        clearInterval(timers[timerId].interval);
+                        timers[timerId].remaining = timers[timerId].initialTime || parseInt(document.querySelector(`.timer-btn[data-timer-id="${timerId}"][data-time]`).dataset.time, 10);
+                        const minutes = Math.floor(timers[timerId].remaining / 60).toString().padStart(2, '0');
+                        const seconds = (timers[timerId].remaining % 60).toString().padStart(2, '0');
+                        timerDisplay.textContent = `${minutes}:${seconds}`;
+                        timerDisplay.classList.remove('text-red-500', 'font-bold');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
